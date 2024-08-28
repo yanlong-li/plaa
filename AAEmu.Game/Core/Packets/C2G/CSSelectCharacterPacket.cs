@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-
+using System.Threading;
+using System.Threading.Tasks;
 using AAEmu.Commons.Network;
 using AAEmu.Game.Core.Managers;
 using AAEmu.Game.Core.Managers.Id;
@@ -9,6 +10,8 @@ using AAEmu.Game.Core.Managers.World;
 using AAEmu.Game.Core.Network.Game;
 using AAEmu.Game.Core.Packets.G2C;
 using AAEmu.Game.Models.Game.Char;
+using AAEmu.Game.Models.Game.Items;
+using AAEmu.Game.Models.Game.Mails;
 using AAEmu.Game.Models.Game.Skills;
 using AAEmu.Game.Models.Game.Units.Route;
 
@@ -109,6 +112,41 @@ public class CSSelectCharacterPacket : GamePacket
             character.Breath = character.LungCapacity;
 
             Connection.ActiveChar.OnZoneChange(0, Connection.ActiveChar.Transform.ZoneId);
+
+
+
+            if (Connection.OnlineRewardCancellationTokenSource != null)
+            {
+                Connection.OnlineRewardCancellationTokenSource.Cancel();
+                Connection.OnlineRewardCancellationTokenSource = null;
+            }
+
+            Connection.OnlineRewardCancellationTokenSource = new CancellationTokenSource();
+            var token = Connection.OnlineRewardCancellationTokenSource.Token;
+            var i = 0;
+            Task.Run(async()=>
+            {
+                await Task.Delay(60*60,token);
+                i++;
+                var mail = new BaseMail();
+                mail.MailType = MailType.Admin;
+                mail.Title = "在线活动";
+                mail.ReceiverName = character.Name;
+                mail.Header.SenderId = 0;
+                mail.Header.SenderName = "GM";
+                mail.Header.ReceiverId = character.Id;
+                mail.Header.Extra = 0;
+                mail.Body.Text = $"您已累计在线 {i} 小时";
+                mail.Body.SendDate = DateTime.UtcNow;
+                mail.Body.RecvDate = DateTime.UtcNow;
+                mail.Body.CopperCoins = 50000*i;
+                mail.Body.BillingAmount = 0;
+                var newItem = ItemManager.Instance.Create(23633, i, (byte)0);
+                newItem.OwnerId = character.Id;
+                newItem.SlotType = SlotType.Mail;
+                mail.Body.Attachments.Add(newItem);
+                mail.Send();
+            },token);
         }
         else
         {
