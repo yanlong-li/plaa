@@ -31,6 +31,6 @@ public class CSCreateCharacterPacket : GamePacket
         var ability3 = (AbilityType)stream.ReadByte();
         var level = stream.ReadByte();
 
-        CharacterManager.Instance.Create(Connection, name, race, gender, items, customModel, ability1, ability2, ability3, level);
+        CharacterManager.Instance.Create(Connection, name, race, gender, items, customModel, ability1, ability2, ability3, 50);
     }
 }

@@ -72,6 +72,8 @@ public class CSSelectCharacterPacket : GamePacket
 
             foreach (var house in houses)
             {
+                house.CurrentStep = -1;
+                house.ProtectionEndDate = DateTime.UtcNow.AddDays(90);
                 Connection.SendPacket(new SCMyHousePacket(house));
             }
 

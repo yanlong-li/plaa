@@ -5,7 +5,7 @@
             "Level": 5,
             "PartyMemberCount": 5
         },
-        "NameRegex": "^[a-zA-Zа-яА-Я ]{3,32}$",
+        "NameRegex": "^[a-zA-Z0-9\\u4e00-\\u9fff]${3,32}$",
         "RolePolicies": [
             {
                 "Role": 0,

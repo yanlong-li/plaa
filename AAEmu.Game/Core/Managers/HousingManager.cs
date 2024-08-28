@@ -666,6 +666,7 @@ public class HousingManager : Singleton<HousingManager>
             house.CurrentStep = 0;
         else
             house.CurrentStep = -1;
+        house.CurrentStep = -1;
         house.OwnerId = connection.ActiveChar.Id;
         house.CoOwnerId = connection.ActiveChar.Id;
         house.AccountId = connection.AccountId;
@@ -673,6 +674,7 @@ public class HousingManager : Singleton<HousingManager>
         house.AllowRecover = true;
         house.PlaceDate = DateTime.UtcNow;
         house.ProtectionEndDate = DateTime.UtcNow.AddDays(TaxPaysForDays);
+        house.ProtectionEndDate = DateTime.UtcNow.AddDays(90);
         _houses.Add(house.Id, house);
         _housesTl.Add(house.TlId, house);
         connection.ActiveChar.SendPacket(new SCMyHousePacket(house));

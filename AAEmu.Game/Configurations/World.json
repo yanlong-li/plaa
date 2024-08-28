@@ -1,8 +1,8 @@
 {
     "World": {
-        "MOTD": "Welcome to AAEmu!",
-        "LogoutMessage": "Hope to see you soon.",
-        "AutoSaveInterval": 5.0,
+        "MOTD": "欢迎进入《跑路上古》。本服仅供玩家游玩体验，禁止RMB交易，无充值、无点券，谨防上当受骗，祝您玩的开心。",
+        "LogoutMessage": "欢迎下次光临~",
+        "AutoSaveInterval": 1.0,
         "ExpRate": 1.0,
         "HonorRate": 1.0,
         "VocationRate": 1.0,

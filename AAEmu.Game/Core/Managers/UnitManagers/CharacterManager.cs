@@ -453,6 +453,7 @@ public class CharacterManager : Singleton<CharacterManager>
         character.Gender = gender;
         character.Transform.ApplyWorldSpawnPosition(template.SpawnPosition);
         character.Level = level;
+        character.Experience = ExperienceManager.Instance.GetExpForLevel(level);
         character.Faction = FactionManager.Instance.GetFaction(template.FactionId);
         character.FactionName = "";
         character.AccessLevel = useAccessLevel;
