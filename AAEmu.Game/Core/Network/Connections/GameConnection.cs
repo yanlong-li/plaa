@@ -40,8 +40,6 @@ public class GameConnection
     public Task LeaveTask { get; set; }
     public CancellationTokenSource CancelTokenSource { get; set; }
     public DateTime LastPing { get; set; }
-    
-    public CancellationTokenSource OnlineRewardCancellationTokenSource { get; set; }
 
     public GameConnection(ISession session)
     {
@@ -87,13 +85,6 @@ public class GameConnection
 
         SaveAndRemoveFromWorld();
         AccountManager.Instance.UpdateLoginTime(AccountId, DateTime.UtcNow);
-
-
-        if (OnlineRewardCancellationTokenSource != null)
-        {
-            OnlineRewardCancellationTokenSource.Cancel();
-            OnlineRewardCancellationTokenSource = null;
-        }
     }
 
     public void Shutdown()
