@@ -40,17 +40,17 @@
 	},
 	"Labor": {
 		"DailyLogin": 0,
-		"Default": 50,
+		"Default": 5000,
 		"TickAmount": 5,
-		"TickAmountPremium": 10,
-		"TickMinutes": 5
+		"TickAmountPremium": 100,
+		"TickMinutes": 100
 	},
 	"LaborOffline": {
 		"DailyLogin": 0, // unused
 		"Default": 0, // unused
 		"TickAmount": 0,
-		"TickAmountPremium": 5,
-		"TickMinutes": 5
+		"TickAmountPremium": 50,
+		"TickMinutes": 50
 	},
 	"Loyalty": {
 		"DailyLogin": 5,
