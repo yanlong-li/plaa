@@ -74,14 +74,26 @@ public class GameConnection
         if (ActiveChar != null)
         {
             foreach (var subscriber in ActiveChar.Subscribers)
+            {
+                if (subscriber is CancellationTokenSource { IsCancellationRequested: false })
+                {
+                    CancelTokenSource.Cancel();
+                }
                 subscriber.Dispose();
+            }
 
             ActiveChar.Events?.OnDisconnect(this, new OnDisconnectArgs { Player = ActiveChar });
             ActiveChar.RemoveAndDespawnActiveOwnedMatesSlaves();
         }
 
         foreach (var subscriber in Subscribers)
+        {
+            if (subscriber is CancellationTokenSource { IsCancellationRequested: false })
+            {
+                CancelTokenSource.Cancel();
+            }
             subscriber.Dispose();
+        }
 
         SaveAndRemoveFromWorld();
         AccountManager.Instance.UpdateLoginTime(AccountId, DateTime.UtcNow);

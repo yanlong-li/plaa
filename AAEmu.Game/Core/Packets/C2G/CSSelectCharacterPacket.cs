@@ -118,29 +118,32 @@ public class CSSelectCharacterPacket : GamePacket
 
             Connection.ActiveChar.PushSubscriber(cts);
 
-            var i = 0;
             Task.Run(async () =>
             {
-                await Task.Delay(60 * 60 * 1000, cts.Token);
-                i++;
-                var mail = new BaseMail();
-                mail.MailType = MailType.Admin;
-                mail.Title = "在线活动";
-                mail.ReceiverName = character.Name;
-                mail.Header.SenderId = 0;
-                mail.Header.SenderName = "GM";
-                mail.Header.ReceiverId = character.Id;
-                mail.Header.Extra = 0;
-                mail.Body.Text = $"您已累计在线 {i} 小时";
-                mail.Body.SendDate = DateTime.UtcNow;
-                mail.Body.RecvDate = DateTime.UtcNow;
-                mail.Body.CopperCoins = 50000 * i;
-                mail.Body.BillingAmount = 0;
-                var newItem = ItemManager.Instance.Create(23633, i, (byte)0);
-                newItem.OwnerId = character.Id;
-                newItem.SlotType = SlotType.Mail;
-                mail.Body.Attachments.Add(newItem);
-                mail.Send();
+                var i = 0;
+                while (!cts.IsCancellationRequested)
+                {
+                    await Task.Delay(60 * 60 * 1000, cts.Token);
+                    i++;
+                    var mail = new BaseMail();
+                    mail.MailType = MailType.Admin;
+                    mail.Title = "在线活动";
+                    mail.ReceiverName = character.Name;
+                    mail.Header.SenderId = 0;
+                    mail.Header.SenderName = "GM";
+                    mail.Header.ReceiverId = character.Id;
+                    mail.Header.Extra = 0;
+                    mail.Body.Text = $"您已累计在线 {i} 小时";
+                    mail.Body.SendDate = DateTime.UtcNow;
+                    mail.Body.RecvDate = DateTime.UtcNow;
+                    mail.Body.CopperCoins = 50000 * i;
+                    mail.Body.BillingAmount = 0;
+                    var newItem = ItemManager.Instance.Create(23633, i, (byte)0);
+                    newItem.OwnerId = character.Id;
+                    newItem.SlotType = SlotType.Mail;
+                    mail.Body.Attachments.Add(newItem);
+                    mail.Send();
+                }
             }, cts.Token);
         }
         else
