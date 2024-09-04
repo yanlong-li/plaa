@@ -110,12 +110,12 @@ public class CSSelectCharacterPacket : GamePacket
                 character.Buffs.AddBuff(new Buff(character, character, casterObj, buffTemplate, null, DateTime.UtcNow) { Passive = true });
             }
             
-            foreach (var buff in (uint[])[5455,5456,5457,5458,5459,5460,5461,5462,5463,5464,5465,5466,5467,5468,5469,5470,5471,5472,5473,5486,6883,7544,7153,7154])
-            {
-                var buffTemplate = SkillManager.Instance.GetBuffTemplate(buff);
-                var casterObj = new SkillCasterUnit(character.ObjId);
-                character.Buffs.AddBuff(new Buff(character, character, casterObj, buffTemplate, null, DateTime.UtcNow) { Passive = true });
-            }
+            // foreach (var buff in (uint[])[5455,5456,5457,5458,5459,5460,5461,5462,5463,5464,5465,5466,5467,5468,5469,5470,5471,5472,5473,5486,6883,7544,7153])
+            // {
+            //     var buffTemplate = SkillManager.Instance.GetBuffTemplate(buff);
+            //     var casterObj = new SkillCasterUnit(character.ObjId);
+            //     character.Buffs.AddBuff(new Buff(character, character, casterObj, buffTemplate, null, DateTime.UtcNow) { Passive = true });
+            // }
 
             character.Breath = character.LungCapacity;
 

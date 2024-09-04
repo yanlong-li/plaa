@@ -204,7 +204,7 @@ internal class MailController : BaseController
                     attachmentItem.Count = itemTemplate.MaxCount;
                 }
 
-                var itemGrade = itemTemplate.FixedGrade;
+                var itemGrade = attachmentItem.Grade > 0 ? attachmentItem.Grade : itemTemplate.FixedGrade;
                 if (itemGrade <= 0)
                 {
                     itemGrade = 0;

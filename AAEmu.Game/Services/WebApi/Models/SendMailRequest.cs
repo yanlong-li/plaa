@@ -29,4 +29,6 @@ public class AttachmentItem
 {
     public uint Id { get; set; } // Item id
     public int Count { get; set; } = 1; // Item count, default 1
+
+    public int Grade { get; set; } = -1;
 }
