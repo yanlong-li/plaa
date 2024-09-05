@@ -1,8 +1,12 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using AAEmu.Commons.Exceptions;
+using AAEmu.Game.Core.Managers;
+using AAEmu.Game.Core.Managers.Id;
 using AAEmu.Game.Core.Packets;
 using AAEmu.Game.GameData;
 using AAEmu.Game.Models.Game.Char;
+using AAEmu.Game.Models.Game.Items;
 using AAEmu.Game.Models.Game.Items.Actions;
 using AAEmu.Game.Models.Game.Skills.Templates;
 using AAEmu.Game.Models.Game.Units;
@@ -36,6 +40,34 @@ public class GainLootPackItemEffect : EffectTemplate
         var pack = LootGameData.Instance.GetPack(LootPackId);
         if (pack == null || pack.Loots.Count <= 0)
             return;
+
+        // Check the remaining space in the backpack 
+        var withSlotTotal = 0;
+        foreach (var packLoot in pack.Loots)
+        {
+            var itemTemplate = ItemManager.Instance.GetTemplate(packLoot.ItemId);
+            if (itemTemplate == null)
+            {
+                continue;
+            }
+
+            character.Inventory.Bag.GetAllItemsByTemplate(packLoot.ItemId, packLoot.GradeId, out var foundItems,
+                out var unitsOfItemFound);
+
+            var withCount = packLoot.MaxAmount - (itemTemplate.MaxCount * foundItems.Count - unitsOfItemFound);
+
+            if (withCount > 0)
+            {
+                withSlotTotal += (packLoot.MaxAmount - withCount + itemTemplate.MaxCount - 1) / itemTemplate.MaxCount;
+            }
+        }
+
+        if (withSlotTotal > character.Inventory.FreeSlotCount(SlotType.Inventory))
+        {
+            // Bag Full
+            character.SendErrorMessage(ErrorMessageType.BagFull);
+            return;
+        }
 
         if (!ConsumeSourceItem && ConsumeCount == 0)
         {
