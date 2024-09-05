@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-
 using AAEmu.Commons.Utils;
 using AAEmu.Game.Core.Network.Connections;
 using AAEmu.Game.Core.Network.Login;
@@ -13,7 +12,6 @@ using AAEmu.Game.Models;
 using AAEmu.Game.Models.Game.Chat;
 using AAEmu.Game.Models.Game.DoodadObj.Static;
 using AAEmu.Game.Models.Game.Team;
-
 using NLog;
 
 namespace AAEmu.Game.Core.Managers.World;
@@ -24,9 +22,12 @@ public class EnterWorldManager : Singleton<EnterWorldManager>
 
     private Dictionary<uint, uint> _accounts;
 
+    private Dictionary<uint, CancellationTokenSource> _cancellationTokens;
+
     protected EnterWorldManager()
     {
         _accounts = new Dictionary<uint, uint>();
+        _cancellationTokens = new Dictionary<uint, CancellationTokenSource>();
     }
 
     public void AddAccount(uint accountId, uint connectionId)
@@ -40,6 +41,13 @@ public class EnterWorldManager : Singleton<EnterWorldManager>
         {
             _accounts.Add(connectionId, accountId);
             connection.SendPacket(new GLPlayerEnterPacket(connectionId, gsId, 0));
+            var token = new CancellationTokenSource();
+            Task.Run(async () =>
+            {
+                await Task.Delay(60 * 1000, token.Token);
+                _accounts.Remove(accountId);
+            }, token.Token);
+            _cancellationTokens.Add(connectionId, token);
         }
     }
 
@@ -61,6 +69,16 @@ public class EnterWorldManager : Singleton<EnterWorldManager>
                 var gm = connection.GetAttribute("gmFlag") != null;
                 connection.SendPacket(new X2EnterWorldResponsePacket(0, gm, connection.Id, port));
                 connection.SendPacket(new ChangeStatePacket(0));
+
+
+                _cancellationTokens.TryGetValue(token, out CancellationTokenSource tokenSource);
+
+                if (tokenSource != null)
+                {
+                    tokenSource.Cancel();
+                    tokenSource.Dispose();
+                    _cancellationTokens.Remove(token);
+                }
             }
             else
             {

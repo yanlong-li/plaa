@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-
 using AAEmu.Commons.Network;
 using AAEmu.Commons.Network.Core;
 using AAEmu.Commons.Utils.DB;
@@ -75,10 +74,11 @@ public class GameConnection
         {
             foreach (var subscriber in ActiveChar.Subscribers)
             {
-                if (subscriber is CancellationTokenSource { IsCancellationRequested: false })
+                if (subscriber is CancellationTokenSource { IsCancellationRequested: false } cancellationTokenSource)
                 {
-                    CancelTokenSource.Cancel();
+                    cancellationTokenSource.Cancel();
                 }
+
                 subscriber.Dispose();
             }
 
@@ -88,10 +88,11 @@ public class GameConnection
 
         foreach (var subscriber in Subscribers)
         {
-            if (subscriber is CancellationTokenSource { IsCancellationRequested: false })
+            if (subscriber is CancellationTokenSource { IsCancellationRequested: false } cancellationTokenSource)
             {
-                CancelTokenSource.Cancel();
+                cancellationTokenSource.Cancel();
             }
+
             subscriber.Dispose();
         }
 
