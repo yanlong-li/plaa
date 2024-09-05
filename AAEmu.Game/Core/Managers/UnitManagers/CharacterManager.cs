@@ -524,6 +524,11 @@ public class CharacterManager : Singleton<CharacterManager>
         character.Abilities = new CharacterAbilities(character);
         character.Abilities.SetAbility(character.Ability1, 0);
 
+        foreach (var ability in character.Abilities.Values)
+        {
+            ability.Exp = ExperienceManager.Instance.GetExpForLevel(level, false);
+        }
+
         character.Actability = new CharacterActability(character);
         foreach (var (id, actabilityTemplate) in _actabilities)
             character.Actability.Actabilities.Add(id, new Actability(actabilityTemplate));
