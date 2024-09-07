@@ -3,8 +3,7 @@
         "PreferClientHeightMap": true,
         "Sources": [
             "ClientData",
-            "ClientData/game_pak",
-            "D:\\games\\client-1.2\\game_pak"
+            "ClientData/game_pak"
         ]
     }
 }

@@ -865,6 +865,7 @@ public class Inventory
         if (expand.ItemId != 0 && expand.ItemCount != 0 && !CheckItems(SlotType.Inventory, expand.ItemId, expand.ItemCount))
         {
             Logger.Warn("Item or Count not fount.");
+            Owner.SendErrorMessage(ErrorMessageType.NotEnoughExpandItemAndMoney);
             return;
         }
 

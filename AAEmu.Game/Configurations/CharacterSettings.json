@@ -41,16 +41,16 @@
 	"Labor": {
 		"DailyLogin": 0,
 		"Default": 5000,
-		"TickAmount": 5,
+		"TickAmount": 50,
 		"TickAmountPremium": 100,
-		"TickMinutes": 100
+		"TickMinutes": 5
 	},
 	"LaborOffline": {
 		"DailyLogin": 0, // unused
 		"Default": 0, // unused
-		"TickAmount": 0,
+		"TickAmount": 50,
 		"TickAmountPremium": 50,
-		"TickMinutes": 50
+		"TickMinutes": 5
 	},
 	"Loyalty": {
 		"DailyLogin": 5,

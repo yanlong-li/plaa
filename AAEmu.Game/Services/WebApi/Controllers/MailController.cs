@@ -6,6 +6,7 @@ using AAEmu.Game.Core.Managers;
 using AAEmu.Game.Core.Managers.World;
 using AAEmu.Game.Models.Game.Char;
 using AAEmu.Game.Models.Game.Items;
+using AAEmu.Game.Models.Game.Items.Actions;
 using AAEmu.Game.Models.Game.Mails;
 using AAEmu.Game.Models.Game.Units;
 using AAEmu.Game.Models.StaticValues;
@@ -213,6 +214,8 @@ internal class MailController : BaseController
                 var newItem = ItemManager.Instance.Create(itemTemplate.Id, attachmentItem.Count, (byte)itemGrade);
                 newItem.OwnerId = character.Id;
                 newItem.SlotType = SlotType.Mail;
+                newItem.Slot = mailRequest.AttachmentItems.IndexOf(attachmentItem);
+                character.Inventory.MailAttachments.AddOrMoveExistingItem(ItemTaskType.Mail, newItem);
                 mail.Body.Attachments.Add(newItem);
             }
 
