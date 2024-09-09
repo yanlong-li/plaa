@@ -1720,6 +1720,13 @@ public partial class Character : Unit, ICharacter
 
     public static Character Load(uint characterId)
     {
+        
+        var character = WorldManager.Instance.GetCharacterById(characterId);
+        if (character != null)
+        {
+            return character;
+        }
+        
         using (var connection = MySQL.CreateConnection())
             return Load(connection, characterId);
     }
